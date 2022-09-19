@@ -27,7 +27,9 @@ export default class StepSlider {
     }
 
     this.elem.addEventListener('click', event => {
-      this.moveSlide(event);
+      let newLeft = (event.clientX - this.elem.getBoundingClientRect().left) / this.elem.offsetWidth;
+
+      this.setValue(Math.round(this.segments * newLeft));
 
       this.elem.dispatchEvent(
         new CustomEvent('slider-change', {
@@ -76,7 +78,13 @@ export default class StepSlider {
       value = 0;
     }
 
+    if (leftRelative < 0) { leftRelative = 0; }
+    if (leftRelative > 1) { leftRelative = 1; }
+
     this.setValue(value);
+
+    this.elem.querySelector('.slider__thumb').style.left = leftRelative * 100 + '%';
+    this.elem.querySelector('.slider__progress').style.width = leftRelative * 100 + '%';
   }
 
   setValue(value) {
