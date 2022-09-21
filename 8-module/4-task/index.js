@@ -164,7 +164,7 @@ export default class Cart {
     this.cartIcon.update(this);
   }
 
-  onSubmit = async (event) => {
+  onSubmit = (event) => {
     event.preventDefault();
 
     const button = document.querySelector(`[type="submit"]`);
@@ -174,28 +174,24 @@ export default class Cart {
 
     button.classList.add('is-loading');
 
-    const response = await fetch('https://httpbin.org/post', {
+    fetch('https://httpbin.org/post', {
       method: 'POST',
       body: new FormData(form)
-    });
-
-    const result = await response.json();
-
-    if (!result) {
-      return;
-    }
-
-    this.cartItems = [];
-    modalTitle.textContent = 'Success!';
-    modalBody.innerHTML = `
-      <div class="modal__body-inner">
-        <p>
-          Order successful! Your order is being cooked :) <br>
-          We’ll notify you about delivery time shortly.<br>
-          <img src="/assets/images/delivery.gif">
-        </p>
-      </div>
-    `;
+    })
+      .then(result => {
+        this.cartItems = [];
+        modalTitle.textContent = 'Success!';
+        modalBody.innerHTML = `
+          <div class="modal__body-inner">
+            <p>
+              Order successful! Your order is being cooked :) <br>
+              We’ll notify you about delivery time shortly.<br>
+              <img src="/assets/images/delivery.gif">
+            </p>
+          </div>
+        `;
+      })
+    ;
   }
 
   addEventListeners() {
