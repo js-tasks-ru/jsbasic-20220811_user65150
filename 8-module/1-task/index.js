@@ -14,6 +14,7 @@ export default class CartIcon {
   update(cart) {
     if (!cart.isEmpty()) {
       this.elem.classList.add('cart-icon_visible');
+      this.initialTopCoord = this.elem.getBoundingClientRect().top + window.scrollY;
 
       this.elem.innerHTML = `
         <div class="cart-icon__inner">
@@ -39,6 +40,23 @@ export default class CartIcon {
   }
 
   updatePosition() {
-    // ваш код ...
+    const isMobile = document.documentElement.clientWidth <= 767;
+    const leftIndent = Math.min(
+      document.querySelector('.container').getBoundingClientRect().right + 20,
+      document.documentElement.clientWidth - this.elem.offsetWidth - 10
+    );
+
+    if (window.scrollY > this.initialTopCoord && !isMobile) {
+      Object.assign(this.elem.style, {
+        position: 'fixed',
+        top: '50px',
+        zIndex: 1e3,
+        right: '10px',
+        left: leftIndent + 'px'
+      });
+
+    } else {
+      this.elem.removeAttribute('style');
+    }
   }
 }
