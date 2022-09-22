@@ -14,7 +14,6 @@ export default class CartIcon {
   update(cart) {
     if (!cart.isEmpty()) {
       this.elem.classList.add('cart-icon_visible');
-      this.initialTopCoord = this.elem.getBoundingClientRect().top + window.scrollY;
 
       this.elem.innerHTML = `
         <div class="cart-icon__inner">
@@ -40,6 +39,10 @@ export default class CartIcon {
   }
 
   updatePosition() {
+    if (this.initialTopCoord === undefined) {
+      this.initialTopCoord = this.elem.getBoundingClientRect().top;
+    }
+
     const isMobile = document.documentElement.clientWidth <= 767;
     const leftIndent = Math.min(
       this.elem.closest('.container').getBoundingClientRect().right + 20,
